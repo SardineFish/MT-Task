@@ -8,10 +8,11 @@ namespace SardineFish.MTTask
 {
     public class TaskProcessor
     {
+        public MTTaskManager TaskManager { get; internal set; }
         public Thread ProcessThread { get; protected set; }
         public Task ProcessTask { get; protected set; }
         public MTTask Task { get; protected set; }
-        public bool Running
+        public bool IsRunning
         {
             get
             {
@@ -28,7 +29,8 @@ namespace SardineFish.MTTask
         public void Start(MTTask task)
         {
             Task = task;
-            task.OnFinish += Finish;
+            task.OnFinish += OnFinishCallback;
+            task.OnError += OnErrorCallback;
             if(task.UseThread)
             {
                 ProcessThread = new Thread(Task.Run);
@@ -41,9 +43,9 @@ namespace SardineFish.MTTask
             }
         }
 
-        public void Finish()
+        void OnFinishCallback()
         {
-            Task.OnFinish -= Finish;
+            Task.OnFinish -= OnFinishCallback;
             if (ProcessThread != null)
             {
                 if (ProcessThread.ThreadState == ThreadState.Running)
@@ -56,6 +58,11 @@ namespace SardineFish.MTTask
                 ProcessTask = null;
             }
             Task = null;
+        }
+
+        void OnErrorCallback(Exception ex)
+        {
+            TaskManager?.InternalErrorCallback(Task, ex);
         }
     }
 }

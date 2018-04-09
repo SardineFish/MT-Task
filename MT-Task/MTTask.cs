@@ -15,6 +15,10 @@ namespace SardineFish.MTTask
 
         int lastPos = 0;
         public abstract void Run();
+        public virtual void Finish()
+        {
+            OnFinish?.Invoke();
+        }
         public virtual void Log()
         {
             lastPos = LogUtility.PrintScrollText(Status, 40, lastPos + 1);
