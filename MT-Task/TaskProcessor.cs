@@ -19,18 +19,19 @@ namespace SardineFish.MTTask
                 if (Task == null)
                     return false;
                 if (Task.UseThread)
-                    return ProcessThread != null && ProcessThread.ThreadState == ThreadState.Running;
+                    return ProcessThread != null && (ProcessThread.ThreadState != ThreadState.Stopped);
                 else
                     return ProcessTask != null && !(ProcessTask.IsCompleted || ProcessTask.IsCanceled || ProcessTask.IsFaulted);
             }
         }
-        public int Cost { get => Task == null ? 0 : Task.Cost; }
+        public long Cost { get => Task == null ? 0 : Task.Cost; }
 
         public void Start(MTTask task)
         {
             Task = task;
             task.OnFinish += OnFinishCallback;
             task.OnError += OnErrorCallback;
+            task.Processor = this;
             if(task.UseThread)
             {
                 ProcessThread = new Thread(Task.Run);

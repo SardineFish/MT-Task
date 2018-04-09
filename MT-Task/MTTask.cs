@@ -6,10 +6,11 @@ namespace SardineFish.MTTask
 {
     public abstract class MTTask
     {
+        public TaskProcessor Processor { get; internal set; }
         public bool UseThread { get; set; } = true;
         public string Status { get; set; }
         public double Progress { get; set; }
-        public int Cost { get; set; } = 0;
+        public long Cost { get; set; } = 0;
         public virtual event Action OnFinish;
         public virtual event Action<Exception> OnError;
 
@@ -18,6 +19,10 @@ namespace SardineFish.MTTask
         public virtual void Finish()
         {
             OnFinish?.Invoke();
+        }
+        public virtual void Error(Exception ex)
+        {
+            OnError?.Invoke(ex);
         }
         public virtual void Log()
         {
