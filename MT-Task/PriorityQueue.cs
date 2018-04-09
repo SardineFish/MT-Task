@@ -27,6 +27,6 @@ namespace SardineFish.MTTask
                 return item;
             }
         }
-        public bool IsEmpty() => Items.Count <= 0;
+        public bool IsEmpty => Items.Count <= 0;
     }
 }

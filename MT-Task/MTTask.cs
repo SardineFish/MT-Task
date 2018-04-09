@@ -9,7 +9,7 @@ namespace SardineFish.MTTask
         public bool UseThread { get; set; } = true;
         public string Status { get; set; }
         public double Progress { get; set; }
-        public int Cost { get; set; }
+        public int Cost { get; set; } = 0;
         public virtual event Action OnFinish;
         public virtual event Action<Exception> OnError;
 

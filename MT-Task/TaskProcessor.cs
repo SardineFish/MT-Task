@@ -55,6 +55,7 @@ namespace SardineFish.MTTask
                 ProcessTask.Dispose();
                 ProcessTask = null;
             }
+            Task = null;
         }
     }
 }
