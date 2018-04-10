@@ -49,8 +49,8 @@ namespace SardineFish.MTTask
             Task.OnFinish -= OnFinishCallback;
             if (ProcessThread != null)
             {
-                if (ProcessThread.ThreadState == ThreadState.Running)
-                    ProcessThread.Abort();
+                /*if (ProcessThread.ThreadState == ThreadState.Running)
+                    ProcessThread.Abort();*/    
                 ProcessThread = null;
             }
             if (ProcessTask != null)
