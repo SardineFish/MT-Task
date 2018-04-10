@@ -51,6 +51,7 @@ namespace SardineFish.MTTask
             {
                 /*if (ProcessThread.ThreadState == ThreadState.Running)
                     ProcessThread.Abort();*/    
+
                 ProcessThread = null;
             }
             if (ProcessTask != null)
