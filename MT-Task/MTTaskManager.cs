@@ -88,6 +88,7 @@ namespace SardineFish.MTTask
             {
                 Console.Clear();
                 long totalCost = 0;
+                bool empty = true;
                 
                 for (var i = 0; i < Processors.Count; i++)
                 {
@@ -102,19 +103,27 @@ namespace SardineFish.MTTask
                         Processors.RemoveAt(i--);
 
                     if (proc.IsRunning)
+                    {
                         proc.Task.Log();
+                        empty = false;
+                    }
                     totalCost += proc.Cost;
                 }
-
-                for (var i = 0; i < Processors.Count && totalCost<MaxCost; i++)
+                if (!Tasks.IsEmpty)
                 {
-                    var proc = Processors[i];
-                    if (!proc.IsRunning)
+                    empty = false;
+                    for (var i = 0; i < Processors.Count && totalCost < MaxCost && !Tasks.IsEmpty; i++)
                     {
-                        proc.Start(Tasks.DeQueue());
-                        totalCost += proc.Cost;
+                        var proc = Processors[i];
+                        if (!proc.IsRunning)
+                        {
+                            proc.Start(Tasks.DeQueue());
+                            totalCost += proc.Cost;
+                        }
                     }
                 }
+                if (empty)
+                    OnTaskEmpty?.Invoke();
                 Thread.Sleep(UpdateInterval);
             }
 
